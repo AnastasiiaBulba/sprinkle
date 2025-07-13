@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Contact the Sprinkle Plants Puzzle Game team for support, feedback, and business inquiries. Find our location, phone, and email."
+    />
+    <meta
+      name="keywords"
+      content="Sprinkle Plants Puzzle Game contact, support, email, phone, address, Australia"
+    />
+
+    <title>Domain.com - Contact</title>
+    <link rel="icon" type="image/x-icon" href="./images/favic512.jpg" />
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/header.css" />
+    <link rel="stylesheet" href="./css/footer.css" />
+    <link rel="stylesheet" href="./css/contact.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Hero Section -->
+      <section class="page-hero">
+        <div class="container">
+          <h1 class="page-title">Get in Touch</h1>
+          <p class="page-subtitle">
+            We'd love to hear from you. Reach out to our team for any questions
+            or feedback.
+          </p>
+        </div>
+      </section>
+
+      <!-- Contact Form Section -->
+      <section id="contact-form" class="contact-form-section">
+        <div class="container">
+          <div class="form-container">
+            <h2 class="section-title">Send us a Message</h2>
+            <form id="contact-form-element" class="contact-form">
+              <div class="form-group">
+                <label for="name" class="form-label">Name *</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="form-input"
+                  required
+                />
+                <span class="error-message" id="name-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="phone" class="form-label">Phone *</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class="form-input"
+                  required
+                />
+                <span class="error-message" id="phone-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="email" class="form-label">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-input"
+                  required
+                />
+                <span class="error-message" id="email-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="message" class="form-label">Message *</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  class="form-textarea"
+                  rows="5"
+                  required
+                ></textarea>
+                <span class="error-message" id="message-error"></span>
+              </div>
+              <button type="submit" class="btn-primary form-submit">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Info Section -->
+      <section id="contact-info-section" class="contact-info-section">
+        <div class="container">
+          <div id="contact-info"></div>
+        </div>
+      </section>
+
+      <!-- Map Section -->
+      <section id="map" class="map-section">
+        <div class="container">
+          <h2 class="section-title">Find Us</h2>
+          <div class="map-container" style="position: relative">
+            <div
+              style="
+                position: absolute;
+                top: 12px;
+                right: 18px;
+                z-index: 2;
+                background: rgba(245, 247, 250, 0.82);
+                padding: 0.45em 1.1em;
+                border-radius: 8px;
+                font-size: 1.02em;
+                font-weight: 500;
+                color: #23272f;
+                box-shadow: 0 2px 12px 0 rgba(40, 48, 60, 0.08);
+              "
+            >
+              456 Garden Avenue, Melbourne VIC 3000, Australia
+            </div>
+            <iframe
+              class="contacts-map"
+              src="https://www.google.com/maps?q=456+Garden+Avenue,+Melbourne+VIC+3000,+Australia&output=embed&hl=en"
+              title="Australia map"
+              allowfullscreen
+              width="100%"
+              height="450"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Thank You!</h3>
+          <button class="modal-close" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>We will contact you soon.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-primary" id="modal-ok">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
