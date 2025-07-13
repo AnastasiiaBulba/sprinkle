@@ -246,7 +246,6 @@ function loadNewsContent(data) {
               Read More
               <span class="read-more-icon">▼</span>
             </button>
-            <div class="news-expanded"></div>
           </div>
         </div>
       `
@@ -276,7 +275,6 @@ function loadNewsContent(data) {
               Read More
               <span class="read-more-icon">▼</span>
             </button>
-            <div class="news-expanded"></div>
           </div>
         </div>
       `

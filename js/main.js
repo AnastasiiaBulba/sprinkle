@@ -25,6 +25,12 @@ async function loadPartial(id, url) {
     // Set active navigation after loading header
     if (id === "header") {
       setActiveNavigation();
+      // Fix header links for non-home pages
+      fixHeaderLinksForNonHome();
+      // Re-initialize smooth scrolling after header is loaded
+      initializeSmoothScrolling();
+      // Re-initialize Play Now button
+      initializePlayNowButton();
     }
   } catch (error) {
     console.error(`Error loading partial ${url}:`, error);
@@ -77,7 +83,7 @@ async function loadPartial(id, url) {
                 <div class="contact-info">
                   <p class="contact-item" id="footer-email">Email: letter@domain.com</p>
                   <p class="contact-item" id="footer-phone">Phone: +61 3 9123 4567</p>
-                  <p class="contact-item" id="footer-address">Address: 456 Garden Avenue, Melbourne VIC 3000, Australia</p>
+                  <p class="contact-item" id="footer-address">Address: 45 Jonson Street, Byron Bay NSW 2481, Australia</p>
                 </div>
               </div>
               <div class="footer-section">
@@ -99,27 +105,111 @@ async function loadPartial(id, url) {
   }
 }
 
+function initializeSmoothScrolling() {
+  // Remove existing event listeners to prevent duplicates
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.removeEventListener("click", handleAnchorClick);
+  });
+
+  // Add smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", handleAnchorClick);
+  });
+}
+
+function handleAnchorClick(e) {
+  e.preventDefault();
+  const href = this.getAttribute("href");
+  const target = document.querySelector(href);
+
+  if (target) {
+    // Close mobile menu if open
+    const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+    const nav = document.querySelector(".nav");
+    if (mobileMenuToggle && nav && nav.style.display === "flex") {
+      mobileMenuToggle.click();
+    }
+
+    // Scroll to target with offset for fixed header
+    const headerHeight = document.querySelector(".header")?.offsetHeight || 0;
+    const targetPosition = target.offsetTop - headerHeight - 20; // 20px extra offset
+
+    window.scrollTo({
+      top: targetPosition,
+      behavior: "smooth",
+    });
+  } else {
+    // If target not found on current page, redirect to home page with anchor
+    const isHome =
+      window.location.pathname === "/" ||
+      window.location.pathname.endsWith("index.html");
+    if (!isHome) {
+      // Navigate to home page with the anchor
+      window.location.href = `./${href}`;
+    }
+  }
+}
+
+function initializePlayNowButton() {
+  const playNowBtn = document.getElementById("play-now-btn");
+  if (playNowBtn) {
+    // Remove existing event listener to prevent duplicates
+    playNowBtn.removeEventListener("click", handlePlayNowClick);
+    // Add new event listener
+    playNowBtn.addEventListener("click", handlePlayNowClick);
+  }
+}
+
+function handlePlayNowClick(e) {
+  e.preventDefault();
+  const gameSection = document.getElementById("game");
+
+  if (gameSection) {
+    const headerHeight = document.querySelector(".header")?.offsetHeight || 0;
+    const targetPosition = gameSection.offsetTop - headerHeight - 20;
+
+    window.scrollTo({
+      top: targetPosition,
+      behavior: "smooth",
+    });
+  } else {
+    // If game section not found on current page, redirect to home page
+    const isHome =
+      window.location.pathname === "/" ||
+      window.location.pathname.endsWith("index.html");
+    if (!isHome) {
+      window.location.href = "./#game";
+    }
+  }
+}
+
 function setActiveNavigation() {
   const currentPage = getCurrentPage();
   const navLinks = document.querySelectorAll(".nav-link");
 
+  // Clear all active states first
   navLinks.forEach((link) => {
     link.classList.remove("active");
   });
 
+  // Set only one active link based on current page
+  let activeLink = null;
+
   switch (currentPage) {
     case "home":
-      const homeLink = document.getElementById("nav-home");
-      if (homeLink) homeLink.classList.add("active");
+      activeLink = document.getElementById("nav-home");
       break;
     case "news":
-      const newsLink = document.getElementById("nav-news");
-      if (newsLink) newsLink.classList.add("active");
+      activeLink = document.getElementById("nav-news");
       break;
     case "contact":
-      const contactLink = document.getElementById("nav-contact");
-      if (contactLink) contactLink.classList.add("active");
+      activeLink = document.getElementById("nav-contact");
       break;
+  }
+
+  // Add active class only to the correct link
+  if (activeLink) {
+    activeLink.classList.add("active");
   }
 }
 
@@ -152,7 +242,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   await loadPartial("header", "./sprinkle_partials/header.html");
-  fixHeaderLinksForNonHome();
   await loadPartial("footer", "./sprinkle_partials/footer.html");
   if (window.location.pathname.includes("contact.html")) {
     await loadPartial("contact-info", "./sprinkle_partials/contact-info.html");
@@ -166,19 +255,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   initializeNewsExpander();
   initializeModal();
 
-  // Add smooth scrolling for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute("href"));
-      if (target) {
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-    });
-  });
+  // Initialize smooth scrolling
+  initializeSmoothScrolling();
+  initializePlayNowButton();
 
   // Add loading animation for buttons
   document
@@ -206,6 +285,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         this.style.transform = "translateY(0)";
       });
     });
+
+  // Handle anchor links on page load (for direct links to sections)
+  const hash = window.location.hash;
+  if (hash) {
+    setTimeout(() => {
+      const target = document.querySelector(hash);
+      if (target) {
+        const headerHeight =
+          document.querySelector(".header")?.offsetHeight || 0;
+        const targetPosition = target.offsetTop - headerHeight - 20;
+
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+      }
+    }, 100); // Small delay to ensure page is fully loaded
+  }
 
   console.log("Sprinkle Plants Puzzle Game website initialized successfully!");
 });

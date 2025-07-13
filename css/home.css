@@ -332,17 +332,37 @@
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
   margin: var(--spacing-xl) 0;
+  min-height: 400px;
+  overflow: hidden;
 }
 
 .game-iframe {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   transition: all var(--transition-normal);
+  max-width: 100%;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  aspect-ratio: 750 / 1334;
 }
 
 .game-iframe:hover {
   transform: scale(1.01);
   box-shadow: var(--shadow-xl);
+}
+
+/* Responsive adjustments for game iframe */
+@media (max-width: 768px) {
+  .game-iframe {
+    max-height: 70vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-iframe {
+    max-height: 60vh;
+  }
 }
 
 /* Features Section */

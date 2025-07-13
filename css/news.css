@@ -198,19 +198,101 @@
   margin-bottom: var(--spacing-md);
 }
 
-.news-expanded {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--transition-slow);
-  color: var(--text-secondary);
-  line-height: 1.6;
+/* News Modal Styles */
+.news-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(4px);
 }
 
-.news-expanded.show {
-  max-height: 500px;
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--border-light);
+.news-modal-content {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-width: 90%;
+  max-height: 90%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.news-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+  color: var(--text-white);
+}
+
+.news-modal-title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.news-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-white);
+  font-size: var(--font-size-2xl);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  line-height: 1;
+}
+
+.news-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.news-modal-body {
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-height: 60vh;
+}
+
+.news-modal-body p {
+  margin-bottom: var(--spacing-md);
+}
+
+.news-modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Ensure news card has relative positioning for modal */
+.news-card {
+  position: relative;
 }
 
 .read-more-btn {
@@ -299,6 +381,24 @@
 
   .news-content {
     padding: var(--spacing-lg);
+  }
+
+  .news-modal-content {
+    max-width: 95%;
+    max-height: 95%;
+  }
+
+  .news-modal-header {
+    padding: var(--spacing-md);
+  }
+
+  .news-modal-title {
+    font-size: var(--font-size-base);
+  }
+
+  .news-modal-body {
+    padding: var(--spacing-md);
+    max-height: 70vh;
   }
 }
 

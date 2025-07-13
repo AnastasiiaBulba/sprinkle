@@ -6,6 +6,14 @@ export function initializeMobileMenu() {
 
   if (!mobileMenuToggle || !nav) return;
 
+  // Helper function to get current page
+  function getCurrentPage() {
+    const path = window.location.pathname;
+    if (path.includes("news.html")) return "news";
+    if (path.includes("contact.html")) return "contact";
+    return "home";
+  }
+
   let isMenuOpen = false;
 
   mobileMenuToggle.addEventListener("click", function () {
@@ -13,6 +21,11 @@ export function initializeMobileMenu() {
 
     // Toggle menu visibility
     if (isMenuOpen) {
+      // Create backdrop
+      const backdrop = document.createElement("div");
+      backdrop.className = "mobile-menu-backdrop";
+      document.body.appendChild(backdrop);
+
       nav.style.display = "flex";
       nav.style.position = "absolute";
       nav.style.top = "100%";
@@ -23,7 +36,7 @@ export function initializeMobileMenu() {
       nav.style.flexDirection = "column";
       nav.style.padding = "var(--spacing-lg)";
       nav.style.gap = "var(--spacing-md)";
-      nav.style.zIndex = "1000";
+      nav.style.zIndex = "1001";
 
       // Animate hamburger to X
       hamburgerLines[0].style.transform = "rotate(45deg) translate(5px, 5px)";
@@ -32,7 +45,42 @@ export function initializeMobileMenu() {
 
       // Prevent body scroll
       document.body.style.overflow = "hidden";
+
+      // Ensure correct active navigation state
+      setTimeout(() => {
+        const currentPage = getCurrentPage();
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        // Clear all active states
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+        });
+
+        // Set only one active link
+        let activeLink = null;
+        switch (currentPage) {
+          case "home":
+            activeLink = document.getElementById("nav-home");
+            break;
+          case "news":
+            activeLink = document.getElementById("nav-news");
+            break;
+          case "contact":
+            activeLink = document.getElementById("nav-contact");
+            break;
+        }
+
+        if (activeLink) {
+          activeLink.classList.add("active");
+        }
+      }, 10);
     } else {
+      // Remove backdrop
+      const backdrop = document.querySelector(".mobile-menu-backdrop");
+      if (backdrop) {
+        backdrop.remove();
+      }
+
       nav.style.display = "";
       nav.style.position = "";
       nav.style.top = "";
@@ -55,7 +103,7 @@ export function initializeMobileMenu() {
     }
   });
 
-  // Close menu when clicking outside
+  // Close menu when clicking outside or on nav links
   document.addEventListener("click", function (e) {
     if (
       isMenuOpen &&
@@ -63,6 +111,18 @@ export function initializeMobileMenu() {
       !nav.contains(e.target)
     ) {
       mobileMenuToggle.click();
+    }
+
+    // Close menu when clicking on backdrop
+    if (isMenuOpen && e.target.classList.contains("mobile-menu-backdrop")) {
+      mobileMenuToggle.click();
+    }
+
+    // Close menu when clicking on nav links (for smooth scrolling)
+    if (isMenuOpen && e.target.classList.contains("nav-link")) {
+      setTimeout(() => {
+        mobileMenuToggle.click();
+      }, 100); // Small delay to allow smooth scrolling to start
     }
   });
 

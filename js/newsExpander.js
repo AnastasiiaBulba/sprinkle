@@ -9,36 +9,58 @@ export function initializeNewsExpander() {
 }
 
 function handleReadMoreClick(button) {
-  const expandedContent = button.nextElementSibling;
-  const icon = button.querySelector(".read-more-icon");
+  const newsCard = button.closest(".news-card");
+  const content = button.getAttribute("data-content");
 
-  if (
-    !expandedContent ||
-    !expandedContent.classList.contains("news-expanded")
-  ) {
+  if (!content || !newsCard) {
     return;
   }
 
-  const isExpanded = button.classList.contains("expanded");
+  // Create modal overlay within the card
+  const modalOverlay = document.createElement("div");
+  modalOverlay.className = "news-modal-overlay";
+  modalOverlay.innerHTML = `
+    <div class="news-modal-content">
+      <div class="news-modal-header">
+        <h3 class="news-modal-title">${
+          newsCard.querySelector(".news-title").textContent
+        }</h3>
+        <button class="news-modal-close">×</button>
+      </div>
+      <div class="news-modal-body">
+        ${content}
+      </div>
+    </div>
+  `;
 
-  if (isExpanded) {
-    // Collapse content
-    button.classList.remove("expanded");
-    button.innerHTML = 'Read More <span class="read-more-icon">▼</span>';
-    expandedContent.classList.remove("show");
-    expandedContent.innerHTML = "";
-  } else {
-    // Expand content
-    button.classList.add("expanded");
-    button.innerHTML = 'Read Less <span class="read-more-icon">▲</span>';
+  // Add modal to the card
+  newsCard.appendChild(modalOverlay);
+  newsCard.classList.add("modal-active");
 
-    // Get content from data attribute
-    const content = button.getAttribute("data-content");
-    if (content) {
-      expandedContent.innerHTML = content;
-      expandedContent.classList.add("show");
+  // Handle close button
+  const closeBtn = modalOverlay.querySelector(".news-modal-close");
+  closeBtn.addEventListener("click", () => {
+    modalOverlay.remove();
+    newsCard.classList.remove("modal-active");
+  });
+
+  // Handle overlay click to close
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) {
+      modalOverlay.remove();
+      newsCard.classList.remove("modal-active");
     }
-  }
+  });
+
+  // Handle escape key
+  const handleEscape = (e) => {
+    if (e.key === "Escape") {
+      modalOverlay.remove();
+      newsCard.classList.remove("modal-active");
+      document.removeEventListener("keydown", handleEscape);
+    }
+  };
+  document.addEventListener("keydown", handleEscape);
 }
 
 // Alternative implementation for static content
@@ -47,36 +69,58 @@ export function initializeStaticNewsExpander() {
 
   readMoreButtons.forEach((button) => {
     button.addEventListener("click", function () {
-      const expandedContent = this.nextElementSibling;
-      const icon = this.querySelector(".read-more-icon");
+      const newsCard = this.closest(".news-card");
+      const content = this.getAttribute("data-content");
 
-      if (
-        !expandedContent ||
-        !expandedContent.classList.contains("news-expanded")
-      ) {
+      if (!content || !newsCard) {
         return;
       }
 
-      const isExpanded = this.classList.contains("expanded");
+      // Create modal overlay within the card
+      const modalOverlay = document.createElement("div");
+      modalOverlay.className = "news-modal-overlay";
+      modalOverlay.innerHTML = `
+        <div class="news-modal-content">
+          <div class="news-modal-header">
+            <h3 class="news-modal-title">${
+              newsCard.querySelector(".news-title").textContent
+            }</h3>
+            <button class="news-modal-close">×</button>
+          </div>
+          <div class="news-modal-body">
+            ${content}
+          </div>
+        </div>
+      `;
 
-      if (isExpanded) {
-        // Collapse content
-        this.classList.remove("expanded");
-        this.innerHTML = 'Read More <span class="read-more-icon">▼</span>';
-        expandedContent.classList.remove("show");
-        expandedContent.innerHTML = "";
-      } else {
-        // Expand content
-        this.classList.add("expanded");
-        this.innerHTML = 'Read Less <span class="read-more-icon">▲</span>';
+      // Add modal to the card
+      newsCard.appendChild(modalOverlay);
+      newsCard.classList.add("modal-active");
 
-        // Get content from data attribute
-        const content = this.getAttribute("data-content");
-        if (content) {
-          expandedContent.innerHTML = content;
-          expandedContent.classList.add("show");
+      // Handle close button
+      const closeBtn = modalOverlay.querySelector(".news-modal-close");
+      closeBtn.addEventListener("click", () => {
+        modalOverlay.remove();
+        newsCard.classList.remove("modal-active");
+      });
+
+      // Handle overlay click to close
+      modalOverlay.addEventListener("click", (e) => {
+        if (e.target === modalOverlay) {
+          modalOverlay.remove();
+          newsCard.classList.remove("modal-active");
         }
-      }
+      });
+
+      // Handle escape key
+      const handleEscape = (e) => {
+        if (e.key === "Escape") {
+          modalOverlay.remove();
+          newsCard.classList.remove("modal-active");
+          document.removeEventListener("keydown", handleEscape);
+        }
+      };
+      document.addEventListener("keydown", handleEscape);
     });
   });
 }
