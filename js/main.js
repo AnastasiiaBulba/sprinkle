@@ -138,8 +138,8 @@ function fixHeaderLinksForNonHome() {
   if (!isHome) {
     const navGame = document.getElementById("nav-game");
     const navHowToPlay = document.getElementById("nav-how-to-play");
-    if (navGame) navGame.setAttribute("href", "/#game");
-    if (navHowToPlay) navHowToPlay.setAttribute("href", "/#how-to-play");
+    if (navGame) navGame.setAttribute("href", "./#game");
+    if (navHowToPlay) navHowToPlay.setAttribute("href", "./#how-to-play");
   }
 }
 
